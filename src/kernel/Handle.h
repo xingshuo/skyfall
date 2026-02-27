@@ -4,6 +4,7 @@
 #include <unordered_map>
 #include <shared_mutex>
 #include <stdint.h>
+#include "kernel/Log.h"
 #include "kernel/Server.h"
 
 namespace skyfall {
@@ -14,7 +15,9 @@ public:
 		static HandleStorage h;
 		return h;
 	}
-	void Init() {}
+	void Init() {
+		SKYFALL_INFO(nullptr, "HandleStorage Init");
+	}
 	ContextSPtr NewContext(const char *name, const char *param);
 	int RetireContext(uint32_t handle);
 	void RetireAllContext();

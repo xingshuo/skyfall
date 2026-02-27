@@ -54,7 +54,7 @@ int32_t INIReader::parseFile(FILE *file) {
 			}
 		}
 		// 2. 去掉首尾空格
-		StringUtil::Strip(line);
+		line = StringUtil::Strip(line);
 		// 3. 去掉空行
 		if (line.empty()) {
 			continue;
@@ -62,7 +62,7 @@ int32_t INIReader::parseFile(FILE *file) {
 		// section
 		if (line[0] == '[' && line[line.length() - 1] == ']') {
 			std::string section(line.substr(1, line.length() - 2));
-			StringUtil::Strip(section);
+			section = StringUtil::Strip(section);
 			if (section.empty()) {
 				return line_no;
 			}
@@ -81,8 +81,8 @@ int32_t INIReader::parseFile(FILE *file) {
 		}
 		std::string key = line.substr(0, pos);
 		std::string value = line.substr(pos + 1);
-		StringUtil::Strip(key);
-		StringUtil::Strip(value);
+		key = StringUtil::Strip(key);
+		value = StringUtil::Strip(value);
 		if (key.empty() || value.empty()) {
 			continue;
 		}

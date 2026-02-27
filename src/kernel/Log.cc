@@ -5,6 +5,7 @@
 #include <cassert>
 #include <cstdio>
 #include <ctime>
+#include "kernel/Server.h"
 #include "util/TimeUtil.h"
 
 namespace skyfall {
@@ -28,6 +29,7 @@ void Logger::Init(const std::string& logfile) {
 		fp_.reset(stdout);
 	}
 	state_.store(State::Ready);
+	SKYFALL_INFO(nullptr, "Logger Init");
 }
 
 void Logger::Exit() {
@@ -38,6 +40,7 @@ void Logger::Exit() {
 		thread_.join();
 	}
 	fp_.reset(nullptr);
+	fprintf(stderr, "logger exit!\n");
 }
 
 void Logger::SetLevel(const std::string& lv) {

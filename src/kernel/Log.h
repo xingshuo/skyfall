@@ -8,7 +8,7 @@
 #include <string>
 #include <mutex>
 #include "util/StringUtil.h"
-#include "kernel/Server.h"
+#include "kernel/Skyfall.h"
 
 namespace skyfall {	
 
@@ -68,11 +68,8 @@ private:
 		Stopped
 	};
 	struct LogItem {
-		LogItem(std::time_t ts, uint32_t src, LogLevel lv, std::string_view s) {
-			ts = ts;
-			source_ = src;
-			level = lv;
-			msg = s;
+		LogItem(std::time_t t, uint32_t src, LogLevel lv, std::string_view s)
+			: ts(t), source_(src), level(lv), msg(s) {
 		};
 		std::time_t ts;
 		uint32_t source_;

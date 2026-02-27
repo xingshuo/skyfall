@@ -36,8 +36,8 @@ int main(int argc, char *argv[]) {
 	}
 	skyfall::Config config;
 	config.thread = reader.GetInt32("app", "thread", 4);
-	config.module_path = reader.GetString("app", "module_path", "./examples/chat/?.so");
-	config.bootstrap = reader.GetString("app", "bootstrap", "testchat bootstrap");
+	config.module_path = reader.GetString("app", "module_path", ""); // ./examples/chat/?.so
+	config.bootstrap = reader.GetString("app", "bootstrap", ""); // testchat bootstrap
 	config.logfile = reader.GetString("log", "logfile", "");
 	config.loglevel = reader.GetString("log", "loglevel", "INFO");
 
@@ -56,8 +56,7 @@ int main(int argc, char *argv[]) {
 	if (cmdline.size() > 1) {
 		args = cmdline[1].data();
 	}
-	auto ctx = skyfall::ContextNew(name, args);
-	if (ctx == nullptr) {
+	if (skyfall::ContextNew(name, args) == nullptr) {
 		SKYFALL_FATAL(nullptr, "Bootstrap error : %s", config.bootstrap);
 	}
 

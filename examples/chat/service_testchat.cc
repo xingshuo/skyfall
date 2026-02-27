@@ -15,21 +15,23 @@ static const char *const GMessageTable[] = {
 	"Goodbye"
 };
 
+static const int kDelayChatMs = 2000;
+
 void TestChat::PrepareChat(skyfall::ContextSPtr ctx) {
 	auto session = NewSession();
-	SKYFALL_INFO(ctx, "%s new chat timer session: %d", GetName().c_str(), session);
-	skyfall::Timeout(ctx->GetHandle(), 2000, session);
+	SKYFALL_INFO(ctx, "%s new chat timer session: %d delay time:%d", GetName().c_str(), session, kDelayChatMs);
+	skyfall::Timeout(ctx->GetHandle(), kDelayChatMs, session);
 }
 
 void TestChat::HandleRequest(skyfall::ContextSPtr ctx, int session, uint32_t source, const void *msg, size_t sz) {
-	SKYFALL_INFO(ctx, "%s recv ping msg %.*s session:%d from peer", GetName().c_str(),static_cast<int>(sz), static_cast<const char*>(msg), session);
+	SKYFALL_INFO(ctx, "%s recv ping msg '%.*s' session:%d from peer %x", GetName().c_str(),static_cast<int>(sz), static_cast<const char*>(msg), session, source);
 	ctx->SendName(GetPeer(), skyfall::PTYPE_RESPONSE, session, const_cast<void*>(msg), sz);
 }
 
 void TestChat::HandleResponse(skyfall::ContextSPtr ctx, int session, uint32_t source, const void *msg, size_t sz) {
 	static size_t cursor = 0;
 	if (m_requests.count(session) > 0) { // chat msg response
-		SKYFALL_INFO(ctx, "%s recv pong msg %.*s session:%d from peer", GetName().c_str(),static_cast<int>(sz), static_cast<const char*>(msg), session);
+		SKYFALL_INFO(ctx, "%s recv pong msg '%.*s' session:%d from peer %x", GetName().c_str(),static_cast<int>(sz), static_cast<const char*>(msg), session, source);
 		if (cursor >= std::size(GMessageTable)) {
 			auto peer_handle = skyfall::FindHandle(GetPeer());
 			SKYFALL_INFO(ctx, "exit peer: %s", GetPeer().c_str());
@@ -43,12 +45,14 @@ void TestChat::HandleResponse(skyfall::ContextSPtr ctx, int session, uint32_t so
 		auto session = NewSession();
 		m_requests.insert(session);
 		const char *msg = GMessageTable[cursor++];
+		SKYFALL_INFO(ctx, "%s new chat text '%s' session: %d", GetName().c_str(), msg, session);
 		ctx->SendName(GetPeer(), skyfall::PTYPE_TEXT, session, static_cast<void *>(const_cast<char*>(msg)), strlen(msg));
 	}
 }
 
 static int
 _cb(skyfall::ContextSPtr ctx, void *ud, int type, int session, uint32_t source, const void *msg, size_t sz) {
+	SKYFALL_DEBUG(ctx, "run callback type:%d sesson:%d source:%u msg:%p sz:%llu", type, session, source, msg, sz);
 	TestChat *app = static_cast<TestChat*>(ud);
 	switch(type) {
 	case skyfall::PTYPE_TEXT:
@@ -101,7 +105,6 @@ testchat_init(TestChat *app, skyfall::ContextSPtr ctx, char *parm) {
 		if (my_name == "Bob") {
 			app->PrepareChat(ctx);
 		}
-		SKYFALL_INFO(ctx, "%s run test", parm);
 	}
 	return 0;
 }

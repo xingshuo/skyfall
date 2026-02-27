@@ -52,6 +52,7 @@ MsgQueue::~MsgQueue() {
 		// report error to the message source
 		Context::SendTo(handle_, msg.source, PTYPE_ERROR, 0, nullptr, 0);
 	}
+	SKYFALL_DEBUG(nullptr, "msgqueue destroy handle: %x", handle_);
 }
 
 void MsgQueue::Push(Message& msg) {
@@ -95,6 +96,7 @@ void MsgQueue::Release() {
 		delete this;
 	} else {
 		GlobalMQ::Instance().Push(this);
+		SKYFALL_WARN(nullptr, "msgqueue re-push on release, handle:%x", handle_);
 		mutex_.unlock();
 	}
 }

@@ -1,5 +1,6 @@
 #include "kernel/Scheduler.h"
 #include "kernel/Timer.h"
+#include "kernel/Log.h"
 
 namespace skyfall {
 
@@ -28,6 +29,7 @@ void Scheduler::Join() {
 			threads_[i].join();
 		}
 	}
+	SKYFALL_INFO(nullptr, "scheduler quit!");
 }
 
 void Scheduler::workerRoutine(int id) {
@@ -38,9 +40,9 @@ void Scheduler::workerRoutine(int id) {
 		if (q == nullptr) {
 			std::unique_lock<std::mutex> lock(mutex_);
 			sleep_num_++;
-			cond_.wait(lock, [this] {
-				return quit_;
-			});
+			if (!quit_) {
+				cond_.wait(lock);
+			}
 			sleep_num_--;
 		} else {
 			dispatch(m, q);

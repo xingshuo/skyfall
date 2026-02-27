@@ -44,6 +44,7 @@ Context::~Context() {
 	// NOTICE: queue_延迟销毁
 	queue_->MarkRelease();
 	Node::Instance().total_ctx_--;
+	SKYFALL_DEBUG(nullptr, "context destroy handle: %x", handle_);
 }
 
 int Context::Send(uint32_t destination, int type, int session, void *data, size_t sz) {

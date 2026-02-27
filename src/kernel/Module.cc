@@ -58,7 +58,7 @@ void *ModuleManager::openDL(const std::string& name) {
 	for (auto iter = path_list.begin(); iter != path_list.end(); iter++) {
 		auto pos = iter->find("?");
 		if (pos == std::string::npos) {
-			SKYFALL_FATAL(nullptr, "Invalid C service path: %s", path_.data());
+			SKYFALL_FATAL(nullptr, "Invalid C service path: <%s>", path_.data());
 		}
 		iter->replace(pos, 1, name);
 		dl = dlopen(iter->c_str(), RTLD_NOW | RTLD_GLOBAL);

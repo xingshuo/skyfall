@@ -8,16 +8,13 @@
 #include <shared_mutex>
 #include <functional>
 #include <atomic>
+#include "kernel/Skyfall.h"
 #include "kernel/Config.h"
 #include "kernel/MsgQueue.h"
 
 namespace skyfall {
 
-class Context;
 class Module;
-
-typedef std::weak_ptr<Context> ContextWPtr;
-typedef std::shared_ptr<Context> ContextSPtr;
 
 using ContextCallback = std::function<int (ContextSPtr ctx, void *ud, int type, int session, uint32_t source , const void *msg, size_t sz)>;
 

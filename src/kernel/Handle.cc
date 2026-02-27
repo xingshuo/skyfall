@@ -3,10 +3,10 @@
 #include <vector>
 #include <cassert>
 #include <memory>
+#include "kernel/Log.h"
 #include "kernel/Module.h"
 #include "kernel/Server.h"
 #include "kernel/MsgQueue.h"
-#include "kernel/Log.h"
 
 namespace skyfall {
 
@@ -99,6 +99,7 @@ ContextSPtr HandleStorage::FindContext(uint32_t handle) {
 int HandleStorage::PushContext(uint32_t handle, Message& msg) {
 	auto ctx = FindContext(handle);
 	if (ctx == nullptr) {
+		SKYFALL_WARN(nullptr, "push context failed, context not find %x", handle);
 		return -1;
 	}
 	ctx->queue_->Push(msg);

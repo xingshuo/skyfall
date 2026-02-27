@@ -5,6 +5,7 @@
 #include <vector>
 #include <queue>
 #include <mutex>
+#include "kernel/Log.h"
 
 namespace skyfall {
 
@@ -52,7 +53,9 @@ public:
 		static GlobalMQ mq;
 		return mq;
 	}
-	void Init() {}
+	void Init() {
+		SKYFALL_INFO(nullptr, "GlobalMQ Init");
+	}
 	GlobalMQ(const GlobalMQ&) = delete;
 	GlobalMQ& operator=(const GlobalMQ&) = delete;
 

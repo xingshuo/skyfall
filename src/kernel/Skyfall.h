@@ -2,7 +2,6 @@
 #define SKYFALL_H
 
 #include <stdint.h>
-#include <kernel/Server.h>
 
 namespace skyfall {
 
@@ -14,6 +13,10 @@ enum : uint32_t {
 
 	PTYPE_TAG_DONTCOPY = 0x10000,
 };
+
+class Context;
+typedef std::weak_ptr<Context> ContextWPtr;
+typedef std::shared_ptr<Context> ContextSPtr;
 
 ContextSPtr ContextNew(const char *name, const char *param);
 int Timeout(uint32_t handle, int64_t interval_ms, int session);

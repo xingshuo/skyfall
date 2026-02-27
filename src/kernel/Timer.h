@@ -20,6 +20,7 @@ public:
 	}
 	void Init() {
 		now_ = TimeUtil::Now();
+		SKYFALL_INFO(nullptr, "TimerManager Init");
 	}
 
 	TimerManager(const TimerManager&) = delete;
@@ -49,7 +50,7 @@ private:
 			session_ = session;
 		}
 		void operator()() const {
-			SKYFALL_DEBUG(nullptr, "timer run %u: %d", handle_, session_);
+			SKYFALL_DEBUG(nullptr, "timer run handle:%u: session:%d", handle_, session_);
 			Message msg{0, session_, nullptr, (size_t)PTYPE_RESPONSE << MESSAGE_TYPE_SHIFT};
 			ContextPush(handle_, msg);
 		}

@@ -1,5 +1,5 @@
 CXX = g++
-CFLAGS = -g -Wall -std=c++17
+CFLAGS = -g -Wall -Wextra -Werror -std=c++17
 EXPORT := -Wl,-E
 SKYFALL_LIBS := -lpthread -ldl
 
