@@ -42,7 +42,7 @@ private:
 	MsgQueue *next_;
 	uint32_t handle_;
 	bool in_global_;
-	bool is_release;
+	bool is_release_;
 	mutable std::mutex mutex_;
 	std::queue<Message> queue_;
 };
@@ -67,8 +67,8 @@ private:
 	~GlobalMQ() = default;
 
 private:
-	MsgQueue *head;
-	MsgQueue *tail;
+	MsgQueue *head_;
+	MsgQueue *tail_;
 	std::mutex mutex_;
 };
 

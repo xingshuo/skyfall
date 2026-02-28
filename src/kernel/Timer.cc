@@ -12,13 +12,12 @@ int TimerManager::Timeout(uint32_t handle, int64_t interval_ms, int session) {
 		}
 		return 0;
 	}
-	std::lock_guard<std::mutex> lock{ mutex_ };
 	auto expired_time = now_ + interval_ms;
 	if (expired_time <= 0) {
 		SKYFALL_ERROR(nullptr, "timeout loopback, source:%u interval:%ld session:%d", handle, interval_ms, session);
 		return -1;
 	}
-	add(expired_time, handle, session);
+	addTimer(expired_time, handle, session);
 	return 0;
 }
 

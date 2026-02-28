@@ -8,29 +8,29 @@
 namespace skyfall {
 
 GlobalMQ::GlobalMQ() {
-	head = nullptr;
-	tail = nullptr;
+	head_ = nullptr;
+	tail_ = nullptr;
 }
 
 void GlobalMQ::Push(MsgQueue *q) {
 	std::lock_guard<std::mutex> lock(mutex_);
 	assert(q->next_ == nullptr);
-	if (tail != nullptr) {
-		tail->next_ = q;
-		tail = q;
+	if (tail_ != nullptr) {
+		tail_->next_ = q;
+		tail_ = q;
 	} else {
-		head = tail = q;
+		head_ = tail_ = q;
 	}
 }
 
 MsgQueue *GlobalMQ::Pop() {
 	std::lock_guard<std::mutex> lock(mutex_);
-	auto *q = head;
+	auto *q = head_;
 	if (q != nullptr) {
-		head = q->next_;
-		if (head == nullptr) {
-			assert(q == tail);
-			tail = nullptr;
+		head_ = q->next_;
+		if (head_ == nullptr) {
+			assert(q == tail_);
+			tail_ = nullptr;
 		}
 		q->next_ = nullptr;
 	}
@@ -42,7 +42,7 @@ MsgQueue::MsgQueue(uint32_t handle) {
 	next_ = nullptr;
 	handle_ = handle;
 	in_global_ = true;
-	is_release = false;
+	is_release_ = false;
 }
 
 MsgQueue::~MsgQueue() {
@@ -82,8 +82,8 @@ size_t MsgQueue::Size() const {
 
 void MsgQueue::MarkRelease() {
 	std::lock_guard<std::mutex> lock(mutex_);
-	assert(is_release == false);
-	is_release = true;
+	assert(!is_release_);
+	is_release_ = true;
 	if (!in_global_) {
 		GlobalMQ::Instance().Push(this);
 	}
@@ -91,7 +91,7 @@ void MsgQueue::MarkRelease() {
 
 void MsgQueue::Release() {
 	mutex_.lock();
-	if (is_release) {
+	if (is_release_) {
 		mutex_.unlock();
 		delete this;
 	} else {

@@ -6,14 +6,14 @@
 
 namespace skyfall {
 
-Module::Module(const std::string& name, void* dl) {
-	name_ = name;
-	module_ = dl;
-	create_ = nullptr;
-	init_ = nullptr;
-	release_ = nullptr;
-	signal_ = nullptr;
-}
+Module::Module(const std::string& name, void* dl):
+	name_(name),
+	module_(dl),
+	create_(nullptr),
+	init_(nullptr),
+	release_(nullptr),
+	signal_(nullptr),
+	is_opened_(false) {}
 
 void *Module::Create() {
 	if (create_ != nullptr) {
@@ -40,9 +40,8 @@ void Module::Signal(void *inst, int signo) {
 }
 
 int Module::openSys() {
-	static bool is_opened = false;
-	assert(is_opened == false);
-	is_opened = true;
+	assert(!is_opened_);
+	is_opened_ = true;
 
 	create_ = (DLCreate)dlsym(module_, (name_ + "_create").c_str());
 	init_ = (DLInit)dlsym(module_, (name_ + "_init").c_str());

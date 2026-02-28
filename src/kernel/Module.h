@@ -33,6 +33,7 @@ private:
 	DLInit init_;
 	DLRelease release_;
 	DLSignal signal_;
+	bool is_opened_;
 };
 
 class ModuleManager final {

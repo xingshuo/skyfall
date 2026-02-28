@@ -2,6 +2,7 @@
 #define SKYFALL_H
 
 #include <stdint.h>
+#include <memory>
 
 namespace skyfall {
 

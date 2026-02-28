@@ -11,13 +11,14 @@ namespace skyfall {
 
 thread_local uint32_t Node::cur_handle_ = static_cast<uint32_t>(-static_cast<int>(ThreadType::Main));
 
-const char *Node::GetEnv(const std::string& key) {
+int Node::GetEnv(const std::string& key, std::string *value) {
 	std::shared_lock<std::shared_mutex> lock(mutex_);
 	auto iter = env_.find(key);
 	if (iter == env_.end()) {
-		return nullptr;
+		return 1;
 	}
-	return iter->second.data();
+	*value = iter->second;
+	return 0;
 }
 
 int Node::SetEnv(const std::string& key, const std::string& value) {
@@ -29,13 +30,10 @@ int Node::SetEnv(const std::string& key, const std::string& value) {
 	return 0;
 }
 
-Context::Context(Module *mod, void *inst, uint32_t handle) {
-	module_ = mod;
-	instance_ = inst;
-	handle_ = handle;
-	queue_ = new MsgQueue(handle);
-	callback_ = nullptr;
-	cb_ud_ = nullptr;
+Context::Context(Module *mod, void *inst, uint32_t handle):
+	module_(mod), instance_(inst),
+	handle_(handle), queue_(new MsgQueue(handle)),
+	callback_(nullptr), cb_ud_(nullptr)	{
 	Node::Instance().total_ctx_++;
 }
 

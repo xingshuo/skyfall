@@ -40,10 +40,10 @@ private:
 private:
 	Module *module_;
 	void *instance_;
+	uint32_t handle_;
 	MsgQueue *queue_;
 	ContextCallback callback_;
 	void *cb_ud_;
-	uint32_t handle_;
 };
 
 class Node final {
@@ -64,7 +64,7 @@ public:
 	int ContextTotal() {
 		return total_ctx_.load(std::memory_order_relaxed);
 	}
-	const char *GetEnv(const std::string& key);
+	int GetEnv(const std::string& key, std::string *value);
 	int SetEnv(const std::string& key, const std::string& value);
 	friend class Context;
 

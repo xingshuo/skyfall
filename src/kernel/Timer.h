@@ -38,17 +38,18 @@ private:
 	~TimerManager() = default;
 
 	template<typename... Args>
-	void add(time_t expired_time, Args&&... args) {
+	void addTimer(time_t expired_time, Args&&... args) {
+		std::lock_guard<std::mutex> lock{ mutex_ };
 		timers_.emplace(expired_time, TimerNode{ std::forward<Args>(args)... });
 	}
 
 private:
 	class TimerNode {
 	public:
-		TimerNode(uint32_t handle, int session) {
-			handle_ = handle;
-			session_ = session;
-		}
+		TimerNode(uint32_t handle, int session):
+			handle_(handle),
+			session_(session) {}
+
 		void operator()() const {
 			SKYFALL_DEBUG(nullptr, "timer run handle:%u: session:%d", handle_, session_);
 			Message msg{0, session_, nullptr, (size_t)PTYPE_RESPONSE << MESSAGE_TYPE_SHIFT};
