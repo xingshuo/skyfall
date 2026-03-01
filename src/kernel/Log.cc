@@ -70,22 +70,12 @@ void Logger::write() {
 	}
 
 	while (state_.load() == State::Ready) {
-		auto& mq = log_queue_.PopAll();
-		if (mq.empty()) {
-			std::this_thread::sleep_for(std::chrono::milliseconds(1));
-		} else {
-			for (auto& item : mq) {
-				doWrite(item);
-			}
-			mq.clear();
+		auto& mq = log_queue_.PopAll(state_);
+		for (auto& item : mq) {
+			doWrite(item);
 		}
+		mq.clear();
 	}
-
-	auto& q = log_queue_.PopAll();
-	for (auto& item : q) {
-		doWrite(item);
-	}
-	q.clear();
 }
 
 static constexpr std::string_view levelString(LogLevel lv) {

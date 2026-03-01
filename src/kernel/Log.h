@@ -7,6 +7,7 @@
 #include <vector>
 #include <string>
 #include <mutex>
+#include <condition_variable>
 #include "util/StringUtil.h"
 #include "kernel/Skyfall.h"
 
@@ -87,24 +88,27 @@ private:
 	};
 	class LogQueue {
 	public:
-		void Push(LogItem&& msg) {
-			std::lock_guard<std::mutex> lock(mutex_);
-			write_q_.push_back(std::forward<LogItem>(msg));
-		}
 		template<typename... Args>
 		void Emplace(Args&&... args) {
 			std::lock_guard<std::mutex> lock(mutex_);
 			write_q_.emplace_back(std::forward<Args>(args)...);
+			if (write_q_.size() == 1) {
+				cond_.notify_one();
+			}
 		}
-		std::vector<LogItem>& PopAll() {
-			std::lock_guard<std::mutex> lock(mutex_);
+		std::vector<LogItem>& PopAll(std::atomic<State>& state) {
+			std::unique_lock<std::mutex> lock(mutex_);
+			cond_.wait(lock, [this, &state] {
+				return !write_q_.empty() || state.load() == State::Stopped;
+			});
 			write_q_.swap(read_q_);
 			return read_q_;
 		}
 	private:
-		mutable std::mutex mutex_;
+		std::mutex mutex_;
 		std::vector<LogItem> read_q_;
 		std::vector<LogItem> write_q_;
+		std::condition_variable cond_;
 	};
 
 	std::atomic<State> state_;
