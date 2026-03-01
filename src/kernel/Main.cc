@@ -11,10 +11,27 @@
 #include "util/StringUtil.h"
 #include "util/INIReader.h"
 
+static void signalHandler(int signo) {
+	switch (signo) {
+		case SIGTERM:
+			SKYFALL_INFO(nullptr, "Received SIGTERM, shutdown...");
+			break;
+		case SIGINT:
+			SKYFALL_INFO(nullptr, "Received SIGINT, shutdown...");
+			break;
+		default:
+			SKYFALL_WARN(nullptr, "Received Unexpected Signal %d", signo);
+			return;
+	}
+	skyfall::Abort();
+}
+
 static void registerSignal() {
 	std::signal(SIGHUP, SIG_IGN);
 	std::signal(SIGQUIT, SIG_IGN);
 	std::signal(SIGPIPE, SIG_IGN);
+	std::signal(SIGTERM, signalHandler);
+	std::signal(SIGINT, signalHandler);
 }
 
 int main(int argc, char *argv[]) {
@@ -36,8 +53,8 @@ int main(int argc, char *argv[]) {
 	}
 	skyfall::Config config;
 	config.thread = reader.GetInt32("app", "thread", 4);
-	config.module_path = reader.GetString("app", "module_path", ""); // ./examples/chat/?.so
-	config.bootstrap = reader.GetString("app", "bootstrap", ""); // testchat bootstrap
+	config.module_path = reader.GetString("app", "module_path", "");
+	config.bootstrap = reader.GetString("app", "bootstrap", "");
 	config.logfile = reader.GetString("log", "logfile", "");
 	config.loglevel = reader.GetString("log", "loglevel", "INFO");
 

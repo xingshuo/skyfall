@@ -24,6 +24,7 @@ int Timeout(uint32_t handle, int64_t interval_ms, int session);
 int SetHandleName(uint32_t handle, const char *name);
 uint32_t FindHandle(const std::string& name);
 void ContextExit(uint32_t handle);
+void Abort();
 
 } // namespace skyfall
 

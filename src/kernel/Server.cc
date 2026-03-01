@@ -124,4 +124,9 @@ void ContextExit(uint32_t handle) {
 	HandleStorage::Instance().RetireContext(handle);
 }
 
+void Abort() {
+	SKYFALL_WARN(nullptr, "Abort!");
+	HandleStorage::Instance().RetireAllContext();
+}
+
 } // namespace skyfall
