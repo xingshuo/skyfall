@@ -4,21 +4,22 @@
 #include <string>
 #include <dlfcn.h>
 #include <unordered_map>
+#include <string_view>
 #include "kernel/Log.h"
 #include "kernel/Skyfall.h"
 
 namespace skyfall {
 
 typedef void *(*DLCreate)(void);
-typedef int (*DLInit)(void *inst, ContextSPtr ctx, const char *parm);
+typedef int (*DLInit)(void *inst, ContextSPtr ctx, std::string_view parm);
 typedef void (*DLRelease)(void *inst);
 typedef void (*DLSignal)(void *inst, int signo);
 
 class Module final {
 public:
-	Module(const std::string& name, void *dl);
+	Module(std::string_view name, void *dl);
 	void *Create();
-	int Init(void *inst, ContextSPtr ctx, const char *parm);
+	int Init(void *inst, ContextSPtr ctx, std::string_view parm);
 	void Release(void *inst);
 	void Signal(void *inst, int signo);
 
@@ -42,7 +43,7 @@ public:
 		static ModuleManager m;
 		return m;
 	}
-	void Init(const std::string& path) {
+	void Init(std::string_view path) {
 		path_ = path;
 		SKYFALL_INFO(nullptr, "ModuleManager Init %s", path_.data());
 	}
@@ -51,7 +52,7 @@ public:
 private:
 	ModuleManager() = default;
 	~ModuleManager() = default;
-	void *openDL(const std::string& name);
+	void *openDL(std::string_view name);
 
 private:
 	std::mutex mutex_;

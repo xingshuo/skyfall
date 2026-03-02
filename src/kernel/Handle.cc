@@ -10,7 +10,7 @@
 
 namespace skyfall {
 
-ContextSPtr HandleStorage::NewContext(const char *name, const char *param) {
+ContextSPtr HandleStorage::NewContext(const std::string& name, std::string_view param) {
 	Module *mod = ModuleManager::Instance().Query(name);
 	if (mod == nullptr) {
 		return nullptr;
@@ -42,10 +42,10 @@ ContextSPtr HandleStorage::NewContext(const char *name, const char *param) {
 	int ret = mod->Init(inst, ctx, param);
 	if (ret == 0) {
 		GlobalMQ::Instance().Push(q);
-		SKYFALL_INFO(ctx, "LAUNCH SUCCEED %s %s", name, param ? param : "");
+		SKYFALL_INFO(ctx, "LAUNCH SUCCEED %s %s", name.data(), param.data());
 		return ctx;
 	} else {
-		SKYFALL_ERROR(ctx, "LAUNCH FAILED %s %s", name, param ? param : "");
+		SKYFALL_ERROR(ctx, "LAUNCH FAILED %s %s", name.data(), param.data());
 		RetireContext(ctx->handle_);
 		q->Release();
 		return nullptr;
@@ -127,7 +127,7 @@ uint32_t HandleStorage::FindHandle(const std::string& name) {
 	return iter->second;
 }
 
-int SetHandleName(uint32_t handle, const char *name) {
+int SetHandleName(uint32_t handle, const std::string& name) {
 	return HandleStorage::Instance().SetHandleName(name, handle);
 }
 

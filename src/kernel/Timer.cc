@@ -31,7 +31,7 @@ void TimerManager::Update() {
 			if (it->first > now_) {
 				break;
 			}
-			expired_.push_back(std::move(it->second));
+			expired_.push_back(it->second);
 			it = timers_.erase(it);
 		}
 	}

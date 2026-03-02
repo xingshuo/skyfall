@@ -3,6 +3,7 @@
 #include <time.h>
 #include <unistd.h>
 #include <string.h>
+#include <string_view>
 #include <cstdio>
 #include <iterator>
 #include "util/StringUtil.h"
@@ -76,8 +77,8 @@ testchat_release(TestChat* app) {
 }
 
 extern "C" int
-testchat_init(TestChat *app, skyfall::ContextSPtr ctx, char *parm) {
-	if (parm == nullptr || parm[0] == '\0' || strcmp(parm, "bootstrap") == 0) {
+testchat_init(TestChat *app, skyfall::ContextSPtr ctx, std::string_view parm) {
+	if (parm == "bootstrap") {
 		SKYFALL_INFO(ctx, "bootstrap start!");
 		SKYFALL_INFO(ctx, "bootstrap service handle: %x", ctx->GetHandle());
 

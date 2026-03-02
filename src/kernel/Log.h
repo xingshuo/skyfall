@@ -6,6 +6,7 @@
 #include <atomic>
 #include <vector>
 #include <string>
+#include <string_view>
 #include <mutex>
 #include <condition_variable>
 #include "util/StringUtil.h"
@@ -35,7 +36,7 @@ public:
 	void SetLevel(LogLevel lv) {
 		level_ = lv;
 	}
-	void SetLevel(const std::string& lv);
+	void SetLevel(std::string_view lv);
 	LogLevel GetLevel() const {
 		return level_;
 	}

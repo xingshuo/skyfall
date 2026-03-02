@@ -70,7 +70,7 @@ int MsgQueue::Pop(Message *out) {
 		in_global_ = false;
 		return 1;
 	}
-	*out = std::move(queue_.front());
+	*out = queue_.front();
 	queue_.pop();
 	return 0;
 }

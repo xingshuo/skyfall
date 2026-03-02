@@ -43,7 +43,7 @@ void Logger::Exit() {
 	fprintf(stderr, "logger exit!\n");
 }
 
-void Logger::SetLevel(const std::string& lv) {
+void Logger::SetLevel(std::string_view lv) {
 	if (lv == "DEBUG") {
 		SetLevel(LogLevel::Debug);
 	} else if (lv == "INFO") {

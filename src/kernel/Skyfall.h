@@ -3,6 +3,7 @@
 
 #include <stdint.h>
 #include <memory>
+#include <string_view>
 
 namespace skyfall {
 
@@ -19,9 +20,9 @@ class Context;
 typedef std::weak_ptr<Context> ContextWPtr;
 typedef std::shared_ptr<Context> ContextSPtr;
 
-ContextSPtr ContextNew(const char *name, const char *param);
+ContextSPtr ContextNew(const std::string& name, std::string_view param);
 int Timeout(uint32_t handle, int64_t interval_ms, int session);
-int SetHandleName(uint32_t handle, const char *name);
+int SetHandleName(uint32_t handle, const std::string& name);
 uint32_t FindHandle(const std::string& name);
 void ContextExit(uint32_t handle);
 void Abort();

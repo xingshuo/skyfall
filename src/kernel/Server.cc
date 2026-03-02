@@ -2,6 +2,7 @@
 #include <memory>
 #include <atomic>
 #include <string.h>
+#include <string_view>
 #include "kernel/Log.h"
 #include "kernel/Module.h"
 #include "kernel/Handle.h"
@@ -111,7 +112,7 @@ void Context::dispatch(Message *msg) {
 	}
 }
 
-ContextSPtr ContextNew(const char *name, const char *param) {
+ContextSPtr ContextNew(const std::string& name, std::string_view param) {
 	return HandleStorage::Instance().NewContext(name, param);
 }
 

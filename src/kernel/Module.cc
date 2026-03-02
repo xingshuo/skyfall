@@ -6,7 +6,7 @@
 
 namespace skyfall {
 
-Module::Module(const std::string& name, void* dl):
+Module::Module(std::string_view name, void* dl):
 	name_(name),
 	module_(dl),
 	create_(nullptr),
@@ -23,7 +23,7 @@ void *Module::Create() {
 	}
 }
 
-int Module::Init(void *inst, ContextSPtr ctx, const char *parm) {
+int Module::Init(void *inst, ContextSPtr ctx, std::string_view parm) {
 	return init_(inst, ctx, parm);
 }
 
@@ -51,7 +51,7 @@ int Module::openSys() {
 }
 
 
-void *ModuleManager::openDL(const std::string& name) {
+void *ModuleManager::openDL(std::string_view name) {
 	void *dl = nullptr;
 	auto path_list = StringUtil::Split(path_, ';');
 	for (auto iter = path_list.begin(); iter != path_list.end(); iter++) {

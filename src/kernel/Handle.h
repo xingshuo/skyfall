@@ -1,9 +1,10 @@
 #ifndef SKYFALL_HANDLE_H
 #define SKYFALL_HANDLE_H
 
+#include <stdint.h>
 #include <unordered_map>
 #include <shared_mutex>
-#include <stdint.h>
+#include <string_view>
 #include "kernel/Log.h"
 #include "kernel/Server.h"
 
@@ -18,7 +19,7 @@ public:
 	void Init() {
 		SKYFALL_INFO(nullptr, "HandleStorage Init");
 	}
-	ContextSPtr NewContext(const char *name, const char *param);
+	ContextSPtr NewContext(const std::string& name, std::string_view param);
 	int RetireContext(uint32_t handle);
 	void RetireAllContext();
 	ContextSPtr FindContext(uint32_t handle);

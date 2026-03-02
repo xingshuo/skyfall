@@ -4,15 +4,15 @@
 
 namespace skyfall {
 
-std::vector<std::string> StringUtil::Split(const std::string& str, char sep, int count) {
+std::vector<std::string> StringUtil::Split(std::string_view str, char sep, int count) {
 	std::vector<std::string> res;
 	if (count == 0) {
-		res.push_back(str);
+		res.emplace_back(str);
 		return res;
 	}
-	std::string::const_iterator cur = str.begin();
-	std::string::const_iterator end = str.end();
-	std::string::const_iterator next = std::find(cur, end, sep);
+	std::string_view::const_iterator cur = str.begin();
+	std::string_view::const_iterator end = str.end();
+	std::string_view::const_iterator next = std::find(cur, end, sep);
 
 	while (next != end) {
 		res.emplace_back(cur, next);
@@ -60,11 +60,11 @@ std::string StringUtil::Format(const char* fmt, ...) {
 	return res;
 }
 
-std::string StringUtil::Strip(const std::string& str)
+std::string StringUtil::Strip(std::string_view str)
 {
 	std::string res;
 	if (!str.empty()) {
-		const char *cur = str.c_str();
+		const char *cur = str.data();
 		const char *end = cur + str.size();
 
 		while (cur < end) {

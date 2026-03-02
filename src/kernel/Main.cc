@@ -68,11 +68,8 @@ int main(int argc, char *argv[]) {
 	skyfall::TimerManager::Instance().Init();
 
 	auto cmdline = skyfall::StringUtil::Split(config.bootstrap, ' ', 1);
-	const char *name = cmdline[0].data();
-	const char *args = "";
-	if (cmdline.size() > 1) {
-		args = cmdline[1].data();
-	}
+	auto name = cmdline[0];
+	auto args = cmdline.size() > 1 ? cmdline[1] : "";
 	if (skyfall::ContextNew(name, args) == nullptr) {
 		SKYFALL_FATAL(nullptr, "Bootstrap error : %s", config.bootstrap);
 	}
