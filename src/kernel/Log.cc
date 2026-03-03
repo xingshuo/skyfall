@@ -3,7 +3,6 @@
 #include <cstdarg>
 #include <cstdlib>
 #include <cassert>
-#include <cstdio>
 #include <ctime>
 #include "kernel/Server.h"
 #include "util/TimeUtil.h"

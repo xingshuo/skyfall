@@ -27,7 +27,7 @@ public:
 	}
 	int Send(uint32_t destination, int type, int session, void *data, size_t sz);
 	int SendName(const std::string& addr, int type, int session, void *data, size_t sz);
-	void SetCallback(ContextCallback cb, void *ud);
+	void SetCallback(ContextCallback cb, void *ud = nullptr);
 
 	static int SendTo(uint32_t source, uint32_t destination, int type, int session, void *data, size_t sz, ContextSPtr ctx = nullptr);
 	static int SendToName(uint32_t source, const std::string& addr, int type, int session, void *data, size_t sz, ContextSPtr ctx = nullptr);

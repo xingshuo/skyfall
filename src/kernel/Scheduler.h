@@ -14,7 +14,7 @@ namespace skyfall {
 
 class Scheduler final {
 public:
-	Scheduler(int N);
+	explicit Scheduler(int N);
 	~Scheduler();
 	void Join();
 

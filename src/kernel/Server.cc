@@ -1,7 +1,7 @@
 #include "kernel/Server.h"
 #include <memory>
 #include <atomic>
-#include <string.h>
+#include <cstring>
 #include <string_view>
 #include "kernel/Log.h"
 #include "kernel/Module.h"

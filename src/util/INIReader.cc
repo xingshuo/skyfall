@@ -6,7 +6,7 @@
 #include <algorithm>
 #include <cctype>
 #include <string>
-#include <string.h>
+#include <cstring>
 #include <cstdlib>
 #include "util/StringUtil.h"
 

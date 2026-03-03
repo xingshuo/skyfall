@@ -10,16 +10,16 @@
 
 namespace skyfall {
 
-typedef void *(*DLCreate)(void);
-typedef int (*DLInit)(void *inst, ContextSPtr ctx, std::string_view parm);
+typedef void *(*DLCreate)(std::string_view param);
+typedef int (*DLInit)(void *inst, ContextSPtr ctx, std::string_view param);
 typedef void (*DLRelease)(void *inst);
 typedef void (*DLSignal)(void *inst, int signo);
 
 class Module final {
 public:
 	Module(std::string_view name, void *dl);
-	void *Create();
-	int Init(void *inst, ContextSPtr ctx, std::string_view parm);
+	void *Create(std::string_view param);
+	int Init(void *inst, ContextSPtr ctx, std::string_view param);
 	void Release(void *inst);
 	void Signal(void *inst, int signo);
 

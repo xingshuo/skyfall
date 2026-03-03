@@ -1,5 +1,5 @@
-#ifndef SKYFALL_MSG_QUEUE_H
-#define SKYFALL_MSG_QUEUE_H
+#ifndef SKYFALL_MSGQUEUE_H
+#define SKYFALL_MSGQUEUE_H
 
 #include <cstdint>
 #include <vector>
@@ -24,7 +24,7 @@ enum : size_t {
 
 class MsgQueue final {
 public:
-	MsgQueue(uint32_t handle);
+	explicit MsgQueue(uint32_t handle);
 	void Push(Message& msg);
 	int Pop(Message *out);
 	size_t Size() const;

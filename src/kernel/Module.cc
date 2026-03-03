@@ -15,16 +15,16 @@ Module::Module(std::string_view name, void* dl):
 	signal_(nullptr),
 	is_opened_(false) {}
 
-void *Module::Create() {
+void *Module::Create(std::string_view param) {
 	if (create_ != nullptr) {
-		return create_();
+		return create_(param);
 	} else {
 		return (void *)(intptr_t)(~0);
 	}
 }
 
-int Module::Init(void *inst, ContextSPtr ctx, std::string_view parm) {
-	return init_(inst, ctx, parm);
+int Module::Init(void *inst, ContextSPtr ctx, std::string_view param) {
+	return init_(inst, ctx, param);
 }
 
 void Module::Release(void *inst) {

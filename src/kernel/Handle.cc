@@ -15,7 +15,7 @@ ContextSPtr HandleStorage::NewContext(const std::string& name, std::string_view 
 	if (mod == nullptr) {
 		return nullptr;
 	}
-	void *inst = mod->Create();
+	void *inst = mod->Create(param);
 	if (inst == nullptr) {
 		return nullptr;
 	}
