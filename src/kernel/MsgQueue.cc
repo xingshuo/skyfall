@@ -90,14 +90,13 @@ void MsgQueue::MarkRelease() {
 }
 
 void MsgQueue::Release() {
-	mutex_.lock();
+	std::unique_lock<std::mutex> lock(mutex_);
 	if (is_release_) {
-		mutex_.unlock();
+		lock.unlock();
 		delete this;
 	} else {
 		GlobalMQ::Instance().Push(this);
 		SKYFALL_WARN(nullptr, "msgqueue re-push on release, handle:%x", handle_);
-		mutex_.unlock();
 	}
 }
 

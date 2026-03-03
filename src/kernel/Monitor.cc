@@ -18,7 +18,7 @@ void Monitor::Trigger(uint32_t source, uint32_t destination) {
 }
 
 void Monitor::Check() {
-	auto version = version_.load(std::memory_order_relaxed);
+	auto version = version_.load();
 	if (version == check_version_) {
 		if (destination_) {
 			SKYFALL_ERROR(nullptr, "A message from [ :%08x ] to [ :%08x ] maybe in an endless loop (version = %d)", source_, destination_, version);

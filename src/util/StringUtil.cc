@@ -68,14 +68,14 @@ std::string StringUtil::Strip(std::string_view str)
 		const char *end = cur + str.size();
 
 		while (cur < end) {
-			if (!isspace(*cur)) {
+			if (!isspace((unsigned char)*cur)) {
 				break;
 			}
 			cur++;
 		}
 
 		while (end > cur) {
-			if (!isspace(*(end - 1))) {
+			if (!isspace((unsigned char)*(end - 1))) {
 				break;
 			}
 			end--;

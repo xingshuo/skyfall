@@ -22,7 +22,10 @@ Logger::~Logger() {
 void Logger::Init(const std::string& logfile) {
 	if (!logfile.empty()) {
 		FILE *fp = std::fopen(logfile.data(), "w");
-		assert(fp != nullptr);
+		if (fp == nullptr) {
+			fprintf(stderr, "open log file '%s' failed, errno %d\n", logfile.data(), errno);
+			exit(1);
+		}
 		fp_.reset(fp);
 	} else {
 		fp_.reset(stdout);
@@ -75,6 +78,12 @@ void Logger::write() {
 		}
 		mq.clear();
 	}
+
+	auto& mq = log_queue_.PopAll(state_);
+	for (auto& item : mq) {
+		doWrite(item);
+	}
+	mq.clear();
 }
 
 static constexpr std::string_view levelString(LogLevel lv) {
