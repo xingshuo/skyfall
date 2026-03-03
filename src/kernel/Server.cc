@@ -70,9 +70,10 @@ int Context::SendTo(uint32_t source, uint32_t destination, int type, int session
 		}
 		return -2;
 	}
-	if (!nocopy && data != nullptr && sz > 0) {
-		void *new_data = malloc(sz);
+	if (!nocopy && data != nullptr) {
+		char *new_data = static_cast<char *>(malloc(sz + 1));
 		memcpy(new_data, data, sz);
+		new_data[sz] = '\0';
 		data = new_data;
 	}
 	type &= 0xff;
@@ -81,7 +82,8 @@ int Context::SendTo(uint32_t source, uint32_t destination, int type, int session
 	Message msg{source, session, data, sz};
 	if (ContextPush(destination, msg)) {
 		SKYFALL_ERROR(ctx, "Send Message to %x failed, source: %x", destination, source);
-		if (data != nullptr && nocopy) {
+		if (data != nullptr) {
+			// NOTICE: always free here!
 			free(data);
 		}
 		return -3;

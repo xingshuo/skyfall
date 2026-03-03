@@ -10,7 +10,7 @@
 
 namespace skyfall {
 
-class HandleStorage {
+class HandleStorage final {
 public:
 	static HandleStorage& Instance() {
 		static HandleStorage h;
@@ -22,10 +22,10 @@ public:
 	ContextSPtr NewContext(const std::string& name, std::string_view param);
 	int RetireContext(uint32_t handle);
 	void RetireAllContext();
-	ContextSPtr FindContext(uint32_t handle);
-	int PushContext(uint32_t handle, Message& msg);
+	ContextSPtr FindContext(uint32_t handle) const;
+	int PushContext(uint32_t handle, Message& msg) const;
 	int SetHandleName(const std::string& name, uint32_t handle);
-	uint32_t FindHandle(const std::string& name);
+	uint32_t FindHandle(const std::string& name) const;
 
 private:
 	HandleStorage() {

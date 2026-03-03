@@ -87,7 +87,7 @@ void HandleStorage::RetireAllContext() {
 	}
 }
 
-ContextSPtr HandleStorage::FindContext(uint32_t handle) {
+ContextSPtr HandleStorage::FindContext(uint32_t handle) const {
 	std::shared_lock<std::shared_mutex> lock(mutex_);
 	auto iter = contexts_.find(handle);
 	if (iter == contexts_.end()) {
@@ -96,7 +96,7 @@ ContextSPtr HandleStorage::FindContext(uint32_t handle) {
 	return iter->second;
 }
 
-int HandleStorage::PushContext(uint32_t handle, Message& msg) {
+int HandleStorage::PushContext(uint32_t handle, Message& msg) const {
 	auto ctx = FindContext(handle);
 	if (ctx == nullptr) {
 		SKYFALL_WARN(nullptr, "push context failed, context not find %x", handle);
@@ -118,7 +118,7 @@ int HandleStorage::SetHandleName(const std::string& name, uint32_t handle) {
 	return 0;
 }
 
-uint32_t HandleStorage::FindHandle(const std::string& name) {
+uint32_t HandleStorage::FindHandle(const std::string& name) const {
 	std::shared_lock<std::shared_mutex> lock(mutex_);
 	auto iter = handles_.find(name);
 	if (iter == handles_.end()) {
