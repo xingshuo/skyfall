@@ -1,4 +1,5 @@
 #include "kernel/Scheduler.h"
+#include <chrono>
 #include "kernel/Timer.h"
 #include "kernel/Log.h"
 

@@ -208,9 +208,9 @@ loglevel = DEBUG
 
 | C 函数签名 | 必须 | 说明 |
 |------------|:----:|------|
-| `void* <name>_create(std::string_view param)` | ✅ | 创建服务实例，返回 `void*`；若不需要 create 逻辑可不导出，框架会使用默认占位实例 |
+| `void* <name>_create(std::string_view param)` | — | 创建服务实例，返回 `void*`；若不需要 create 逻辑可不导出，框架会使用默认占位实例 |
 | `int <name>_init(void*, ContextSPtr, std::string_view)` | ✅ | 初始化服务，注册 callback，返回 0 成功 |
-| `void <name>_release(void*)` | ✅ | 销毁服务实例 |
+| `void <name>_release(void*)` | — | 销毁服务实例 |
 | `void <name>_signal(void*, int)` | — | 处理信号（可选） |
 
 ### 推荐模式：基类 + 多态

@@ -31,16 +31,22 @@ public:
 
 	static int SendTo(uint32_t source, uint32_t destination, int type, int session, void *data, size_t sz, ContextSPtr ctx = nullptr);
 	static int SendToName(uint32_t source, const std::string& addr, int type, int session, void *data, size_t sz, ContextSPtr ctx = nullptr);
+	void Signal(int signo);
+	void EndlessSignalEnable(int enable);
+
 	friend class HandleStorage;
 	friend class Scheduler;
+	friend class Monitor;
 
 private:
 	void dispatch(Message *msg);
+	void endless();
 
 private:
 	Module *module_;
 	void *instance_;
 	uint32_t handle_;
+	bool is_endless_signal_;
 	MsgQueue *queue_;
 	ContextCallback callback_;
 	void *cb_ud_;

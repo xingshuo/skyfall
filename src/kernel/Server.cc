@@ -33,7 +33,7 @@ int Node::SetEnv(const std::string& key, const std::string& value) {
 
 Context::Context(Module *mod, void *inst, uint32_t handle):
 	module_(mod), instance_(inst),
-	handle_(handle), queue_(new MsgQueue(handle)),
+	handle_(handle), is_endless_signal_(false), queue_(new MsgQueue(handle)),
 	callback_(nullptr), cb_ud_(nullptr)	{
 	Node::Instance().total_ctx_++;
 }
@@ -100,6 +100,14 @@ void Context::SetCallback(ContextCallback cb, void *ud) {
 	cb_ud_ = ud;
 }
 
+void Context::Signal(int signo) {
+	module_->Signal(instance_, signo);
+}
+
+void Context::EndlessSignalEnable(int enable) {
+	is_endless_signal_ = static_cast<bool>(enable);
+}
+
 void Context::dispatch(Message *msg) {
 	if (callback_ == nullptr) {
 		free(msg->data);
@@ -111,6 +119,12 @@ void Context::dispatch(Message *msg) {
 	int reserve_msg = callback_(shared_from_this(), cb_ud_, type, msg->session, msg->source, msg->data, sz);
 	if (!reserve_msg) {
 		free(msg->data);
+	}
+}
+
+void Context::endless() {
+	if (is_endless_signal_) {
+		Signal(0);
 	}
 }
 

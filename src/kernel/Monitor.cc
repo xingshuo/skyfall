@@ -1,6 +1,7 @@
 #include "kernel/Monitor.h"
 #include "kernel/Server.h"
 #include "kernel/Log.h"
+#include "kernel/Handle.h"
 
 namespace skyfall {
 
@@ -22,6 +23,10 @@ void Monitor::Check() {
 	if (version == check_version_) {
 		if (destination_) {
 			SKYFALL_ERROR(nullptr, "A message from [ :%08x ] to [ :%08x ] maybe in an endless loop (version = %d)", source_, destination_, version);
+			auto ctx = HandleStorage::Instance().FindContext(destination_);
+			if (ctx != nullptr) {
+				ctx->endless();
+			}
 		}
 	} else {
 		check_version_ = version;
